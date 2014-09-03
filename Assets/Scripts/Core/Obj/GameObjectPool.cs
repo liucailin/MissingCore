@@ -3,26 +3,27 @@ using Core.Obj;
 
 namespace Core.Obj
 {
-	public class GameObjectPool : ObjPool<GameObject>
+	public class GameObjectPool : ObjPool<Object>
 	{
-		public GameObjectPool(GameObject pooledGo, int capacity) : base (pooledGo, capacity) {}
+		public GameObjectPool(Object pooledGo, int capacity) : base (pooledGo, capacity) {}
 
 
-		protected override void AddPooledObj (GameObject pooled)
-		{
-			GameObject go = GameObject.Instantiate(pooled) as GameObject;
-			go.SetActive(false);
-			base.AddPooledObj (pooled);
+		protected override Object Pooled {
+			get {
+				Object pooledObj = Object.Instantiate(pooled);
+				(pooledObj as GameObject).SetActive(false);
+				return pooledObj;
+			}
 		}
 
-		public override GameObject PopObj ()
+		public override Object PopObj ()
 		{
-			GameObject popObj = base.PopObj ();
-			popObj.SetActive(true);
+			Object popObj = base.PopObj ();
+			(popObj as GameObject).SetActive(true);
 			return popObj;
 		}
 
-		public override void PushObj (GameObject pushed)
+		public override void PushObj (Object pushed)
 		{
 			base.PushObj (pushed);
 		}

@@ -37,30 +37,32 @@ namespace Core.Obj
 		void InitPool()
 		{
 			pools = new Queue<T>(capcity);
-			for ( int i = 0; i < pools.Count; i++ )
+			for ( int i = 0; i < capcity; i++ )
 			{
-				AddPooledObj(pooled);
+				PushObj(Pooled);
 			}
 		}
 
-		protected virtual void AddPooledObj(T pooled)
+		protected virtual T Pooled
 		{
-			pools.Enqueue(pooled);			
+			get
+			{
+				return pooled;
+			}
 		}
 
 		public virtual T PopObj ()
 		{
-			T pop = default(T);
 			if (pools.Count > 0)
-			{
-				pop = pools.Dequeue();
+			{							
+				return pools.Dequeue();
 			}
 			else
 			{
-				pools.Enqueue(pooled);
-				PopObj();
+				PushObj(Pooled);
+				return PopObj();
 			}
-			return pop;
+
 		}
 
 		public virtual void PushObj (T pushed)
