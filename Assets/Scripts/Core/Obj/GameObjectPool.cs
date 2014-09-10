@@ -28,6 +28,22 @@ namespace Core.Obj
 			base.PushObj (pushed);
 		}
 	}
+
+	public class CxObjPool : ObjPool<CxObj>
+	{
+		public CxObjPool(CxObj pooledCxObj, int capacity) : base (pooledCxObj, capacity) {}
+
+		protected override CxObj Pooled {
+			get {
+				return base.Pooled;
+			}
+		}
+
+		public override CxObj PopObj ()
+		{
+			return base.PopObj ();
+		}
+	}
 }
 
 
