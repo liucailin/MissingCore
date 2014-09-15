@@ -7,20 +7,28 @@ public class Main : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		GameObjectPoolManager.Instance.RegPool(typeof(GameObject), go);
 
+
+
+		CxObjPoolManager.Instance.RegPool (CxObjFactory.Instance.GetSimpleCx (), 30);
 
 		InvokeRepeating("AddCube", 0, 0.5f);
+		InvokeRepeating("ReduceCube", 0, 0.8f);
 
 	
 	}
 
 	void AddCube()
 	{
-		GameObject go = GameObjectPoolManager.Instance.GetGameObjectPool(typeof(GameObject)).PopObj() as GameObject;
-		go.transform.position = new Vector3(x, 0, 0);
-		x++;
+		CxObj cxObj = CxObjPoolManager.Instance.GetObj<CxObj> ();
+		cxObj.objView.ViewTransform.position = new Vector3 (x, 0, 0);
+		x ++;		
+	}
+
+	void ReduceCube ()
+	{
+		CxObjPool cxPool = CxObjPoolManager.Instance.GetObjPool ();
+		cxPool.PushObj (GameObject.Find ("cube"));
 	}
 	
 	// Update is called once per frame

@@ -5,6 +5,11 @@ namespace Core.Obj
 {
 	public class CxCharacter : CxObj, IAttacker, IDefender
 	{
+		public override void Create (CxObjVO cxObjVO)
+		{
+			base.Create (cxObjVO);
+		}
+
 		public void Attack ()
 		{
 			throw new System.NotImplementedException ();
@@ -21,21 +26,7 @@ namespace Core.Obj
 		}
 	}
 
-	public class Mover : IMover
-	{
-		public void Move (Vector3 translation, Space relativeTo = Space.World)
-		{
-			trans.Translate(translation, relativeTo);
-		}
 
-		public void MoveTo (CxObj cxObj)
-		{
-			Move (cxObj.objView.ViewTransform.position);
-		}
-
-
-		Transform trans;
-	}
 
 	public interface IUpdateable
 	{

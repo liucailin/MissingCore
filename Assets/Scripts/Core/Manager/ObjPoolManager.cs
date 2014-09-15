@@ -5,37 +5,31 @@ using UnityEngine;
 
 namespace Core.Manager
 {
-	public class ObjPoolManager : Singleton<ObjPoolManager>
+	public class CxObjPoolManager : Singleton<CxObjPoolManager>
 	{
-
-		public void RegPool(Type poolType, object pooledObj)
+		public void RegPool<T> (T pooledObj, int poolCount)  where T : CxObj
 		{
-			poolCon.AddObj(poolType, new ObjPool<object>(pooledObj, 10));
+			this.poolType = typeof (T);
+			poolCon.AddObj(poolType, new CxObjPool (pooledObj, poolCount));
+		}
+		
+		public CxObjPool GetObjPool ()
+		{
+			return poolCon.GetObj (poolType);
 		}
 
-		public ObjPool<object> GetPool(Type poolType)
+		public CxObj GetCxObj ()
 		{
-			return null;
+			return GetObjPool ().PopObj ();
 		}
 
-
-
-		ObjContainer<Type, ObjPool<object>> poolCon = new ObjContainer<Type, ObjPool<object>>();
-	}
-
-	public class GameObjectPoolManager : Singleton<GameObjectPoolManager>
-	{
-		public void RegPool(Type poolType, UnityEngine.Object pooledObj)
+		public T GetObj<T> () where T : CxObj
 		{
-			poolCon.AddObj(poolType, new GameObjectPool(pooledObj, 10));
+			return GetCxObj () as T;
 		}
-
-		public GameObjectPool GetGameObjectPool(Type poolType)
-		{
-			return poolCon.GetObj(poolType);
-		}
-
-		ObjContainer<Type, GameObjectPool> poolCon = new ObjContainer<Type, GameObjectPool>();
+		
+		Type poolType;
+		ObjContainer<Type, CxObjPool> poolCon = new ObjContainer<Type, CxObjPool>();
 	}
 }
 

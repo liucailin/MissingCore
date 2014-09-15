@@ -35,13 +35,17 @@ namespace Core.Obj
 
 		protected override CxObj Pooled {
 			get {
-				return base.Pooled;
+				CxObj cxObj = CxObj.Clone (pooled);
+				cxObj.objView.ViewGameObject.SetActive (false);
+				return cxObj;
 			}
 		}
 
 		public override CxObj PopObj ()
 		{
-			return base.PopObj ();
+			CxObj cxObj =  base.PopObj ();
+			cxObj.objView.ViewGameObject.SetActive (true);
+			return cxObj;
 		}
 	}
 }
