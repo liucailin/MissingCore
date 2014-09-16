@@ -1,13 +1,25 @@
 ﻿using Core.Obj;
 using UnityEngine;
+using Core.Obj.Manager;
 
 namespace Core.Obj
 {
-	public class CxCharacter : CxObj, IAttacker, IDefender
+	public class CxCharacterVO : CxObjVO
+	{
+
+
+	}
+
+	public class CxCharacter : CxObj, IAttacker, IDefender, ICharacter
 	{
 		public override void Create (CxObjVO cxObjVO)
 		{
 			base.Create (cxObjVO);
+		}
+
+		public void Die ()
+		{
+			CxObjPoolManager.Instance.ReleaseCxObj (this);
 		}
 
 		public void Attack ()

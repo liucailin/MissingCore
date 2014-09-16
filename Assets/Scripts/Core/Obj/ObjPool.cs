@@ -3,8 +3,12 @@ using System.Collections.Generic;
 
 namespace Core.Obj
 {
-	public interface IPooled {}
-	public interface IPool<T>/* where T : IPooled*/
+	public interface IPooled 
+	{
+		bool IsPooled { get; set; }
+	}
+
+	public interface IPool<T> where T : IPooled
 	{
 		/// <summary>
 		/// Pops the object.
@@ -19,7 +23,7 @@ namespace Core.Obj
 		void PushObj(T pushed);
 	}
 
-	public class ObjPool<T> : IPool<T>/*  where T : IPooled*/
+	public class ObjPool<T> : IPool<T>  where T : IPooled
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Core.Obj.ObjPool`1"/> class.
@@ -54,8 +58,10 @@ namespace Core.Obj
 		public virtual T PopObj ()
 		{
 			if (pools.Count > 0)
-			{							
-				return pools.Dequeue();
+			{	
+				T pop = pools.Dequeue ();
+				pop.IsPooled = false;
+				return pop;
 			}
 			else
 			{
@@ -67,6 +73,7 @@ namespace Core.Obj
 
 		public virtual void PushObj (T pushed)
 		{
+			pushed.IsPooled = true;
 			pools.Enqueue(pushed);
 		}
 

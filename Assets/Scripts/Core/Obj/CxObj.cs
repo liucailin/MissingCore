@@ -10,7 +10,7 @@ namespace Core.Obj
 		public string objResPath;
 	}
 
-	public class CxObj
+	public class CxObj : IPooled
 	{
 		public virtual void Create (CxObjVO cxObjVO)
 		{
@@ -25,6 +25,10 @@ namespace Core.Obj
 			CxObj newCx = new CxObj ();
 			newCx.Create (cxObj.objVO);
 			return newCx;
+		}
+
+		public bool IsPooled {
+			get; set;
 		}
 
 
@@ -48,6 +52,23 @@ namespace Core.Obj
 		public Transform ViewTransform
 		{
 			get { return ViewGameObject.transform; }
+		}
+
+		public T AddComponet<T> () where T : Component
+		{
+			T comp = GetComponet<T> ();
+			if (comp == null) comp = ViewGameObject.AddComponent<T> ();
+			return comp;
+		}
+
+		public T GetComponet<T> () where T : Component
+		{
+			return ViewGameObject.GetComponent<T> ();
+		}
+
+		public void RemoveComponet (Component comp)
+		{
+			GameObject.Destroy (comp);
 		}
 
 		//protected GameObject viewGamobject;

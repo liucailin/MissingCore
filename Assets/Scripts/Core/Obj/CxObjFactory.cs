@@ -8,6 +8,7 @@ namespace Core.Obj
 		public CxObj GetSimpleCx ()
 		{
 			CxObjVO cxobjVO = new CxObjVO ();
+			cxobjVO.objResPath = "man";
 			CxObj cxObj = new CxObj ();
 			cxObj.Create (cxobjVO);
 

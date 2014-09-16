@@ -12,6 +12,12 @@ namespace Core.Obj.Manager
 			{
 				return GameObject.CreatePrimitive (PrimitiveType.Cube);
 			}
+			else
+			{
+				Object res =  Resources.Load (objResPath);
+				return Object.Instantiate (res);
+			}
+
 			return null;
 		}
 	}

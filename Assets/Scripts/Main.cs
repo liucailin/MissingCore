@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Core.Manager;
+using Core.Obj.Manager;
 using Core.Obj;
+using System;
 
 public class Main : MonoBehaviour {
 
@@ -9,26 +10,50 @@ public class Main : MonoBehaviour {
 	void Start () {
 
 
+		//Profiler.BeginSample("MyPieceOfCode");
+		
+		PrintMemoryUsage ();
+		CxObjPoolManager.Instance.RegPool (CxObjFactory.Instance.GetSimpleCx (), 500);
+		PrintMemoryUsage ();
+		//Profiler.EndSample();
+		
+		InvokeRepeating("AddCube", 0, 0.05f);
+		//InvokeRepeating("ReduceCube", 0, 0.8f);
 
-		CxObjPoolManager.Instance.RegPool (CxObjFactory.Instance.GetSimpleCx (), 30);
 
-		InvokeRepeating("AddCube", 0, 0.5f);
-		InvokeRepeating("ReduceCube", 0, 0.8f);
 
 	
 	}
 
+
+	void PrintMemoryUsage (int index = 0)
+	{
+		print (index + " usedHeapSize: " + Profiler.usedHeapSize);
+		print (index + " GetMonoHeapSize: " + Profiler.GetMonoHeapSize ());
+		print (index + " GetMonoUsedSize: " + Profiler.GetMonoUsedSize ());
+		print (index + " GetTotalAllocatedMemory: " + Profiler.GetTotalAllocatedMemory ());
+		print (index + " GetTotalReservedMemory: " + Profiler.GetTotalReservedMemory ());
+		print (index + " GetTotalUnusedReservedMemory: " + Profiler.GetTotalUnusedReservedMemory ());
+
+		uint curuse = Profiler.GetTotalAllocatedMemory ();
+		print (index + " " +( curuse - lastuse));
+		lastuse = curuse;
+
+
+	}
+
 	void AddCube()
 	{
-		CxObj cxObj = CxObjPoolManager.Instance.GetObj<CxObj> ();
+		CxObj cxObj = CxObjPoolManager.Instance.GetCxObj<CxObj> ();
 		cxObj.objView.ViewTransform.position = new Vector3 (x, 0, 0);
 		x ++;		
+		PrintMemoryUsage (x);
 	}
 
 	void ReduceCube ()
 	{
-		CxObjPool cxPool = CxObjPoolManager.Instance.GetObjPool ();
-		cxPool.PushObj (GameObject.Find ("cube"));
+
+
 	}
 	
 	// Update is called once per frame
@@ -36,5 +61,6 @@ public class Main : MonoBehaviour {
 	
 	}
 
-	float x;
+	int x;
+	uint lastuse;
 }
